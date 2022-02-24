@@ -1,0 +1,50 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - 'main'
+  release:
+    types: [created]
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: cc2022-lab-6
+      INSTANCE_ZONE: us-central1-a
+      INSTAMCE_NAME: lab-6-instance
+      IMAGE_NAME: lab-6-image
+      CONTAINER_NAME: lab-6-container
+      GITHUB_REPO_URL: https://github.com/dkargatzis/CC2020-lab-6-nodeapp.git
+
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Config authentication to Google Cloud
+      - id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_TF_SA_CREDS_BASE64 }}
+
+      # Set up Cloud SDK
+      - id: gcloud-setup
+        uses: google-github-actions/setup-gcloud@v0
+
+      # Build the Docker image
+      - name: Build and deploy to Compute engine
+        id: build
+        if:
+        run: |-
+          gcloud --quiet compute ssh --project=${{ env.PROJECT_ID }} --zone=${{ env.ZONE }} --command \
+            'git clone ${{ env.GITHUB_REPO_URL }} node-app-dir && cd "$_" && docker image build -t ${{ env.IMAGE_NAME }}:latest . && docker container run -d --name ${{ env.CONTAINER_NAME }} --publish 80:3000 ${{ env.IMAGE_NAME }}:latest' 
