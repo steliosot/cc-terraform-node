@@ -46,5 +46,5 @@ jobs:
         id: build
         if:
         run: |-
-          gcloud --quiet compute ssh $${{ env.INSTAMCE_NAME }} --project=${{ env.PROJECT_ID }} --zone=${{ env.ZONE }} --command \
+          gcloud --quiet compute ssh ${{ env.INSTAMCE_NAME }} --project=${{ env.PROJECT_ID }} --zone=${{ env.ZONE }} --command \
             'git clone ${{ env.GITHUB_REPO_URL }} node-app-dir && cd "$_" && docker image build -t ${{ env.IMAGE_NAME }}:latest . && docker container run -d --name ${{ env.CONTAINER_NAME }} --publish 80:3000 ${{ env.IMAGE_NAME }}:latest' 
