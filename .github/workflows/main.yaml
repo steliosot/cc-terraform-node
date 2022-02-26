@@ -15,12 +15,12 @@ jobs:
     name: Setup, Build and Deploy
     runs-on: ubuntu-latest
     env:
-      PROJECT_ID: cc2022-lab-6
+      PROJECT_ID: lab-7-270015
       INSTANCE_ZONE: us-central1-a
       INSTAMCE_NAME: lab-6-instance
       IMAGE_NAME: lab-6-image
       CONTAINER_NAME: lab-6-container
-      GITHUB_REPO_URL: https://github.com/dkargatzis/CC2020-lab-6-nodeapp.git
+      GITHUB_REPO_URL: https://steliosot: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@github.com/steliosot/CC2020-lab-6-nodeapp.git
 
     # Add "id-token" with the intended permissions.
     permissions:
@@ -47,4 +47,4 @@ jobs:
         if:
         run: |-
           gcloud --quiet compute ssh ${{ env.INSTAMCE_NAME }} --project=${{ env.PROJECT_ID }} --zone=${{ env.INSTANCE_ZONE }} --command \
-            'git clone ${{ env.GITHUB_REPO_URL }} node-app-dir && cd "$_" && sudo docker image build -t ${{ env.IMAGE_NAME }}:latest . && sudo docker container run -d --name ${{ env.CONTAINER_NAME }} --publish 80:3000 ${{ env.IMAGE_NAME }}:latest' 
+            'rm -rf node-app-dir && git clone ${{ env.GITHUB_REPO_URL }} node-app-dir && cd "$_" && sudo docker image build -t ${{ env.IMAGE_NAME }}:latest . && sudo docker rm -f ${{ env.CONTAINER_NAME }} && sudo docker container run -d --name ${{ env.CONTAINER_NAME }} --publish 80:3000 ${{ env.IMAGE_NAME }}:latest' 
