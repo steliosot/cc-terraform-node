@@ -15,12 +15,12 @@ jobs:
     name: Setup, Build and Deploy
     runs-on: ubuntu-latest
     env:
-      PROJECT_ID: lab-7-270015
+      PROJECT_ID: <ADD-HERE-YOUR-PROJECT-ID>
       INSTANCE_ZONE: us-central1-a
-      INSTAMCE_NAME: lab-6-instance
-      IMAGE_NAME: lab-6-image
-      CONTAINER_NAME: lab-6-container
-      GITHUB_REPO_URL: https://steliosot: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@github.com/steliosot/CC2020-lab-6-nodeapp.git
+      INSTAMCE_NAME: lab-7-instance
+      IMAGE_NAME: lab-7-image
+      CONTAINER_NAME: lab-7-container
+      GITHUB_REPO_URL: <ADD-HERE-YOUR-PRIVATE-GIT-REPO-URL>
 
     # Add "id-token" with the intended permissions.
     permissions:
